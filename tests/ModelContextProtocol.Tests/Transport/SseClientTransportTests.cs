@@ -42,6 +42,16 @@ public class SseClientTransportTests : LoggedTest
     }
 
     [Fact]
+    public void Constructor_Sets_AdditionalHeaders_Correctly()
+    {
+        using var mockHttpHandler = new MockHttpHandler();
+        using var httpClient = new HttpClient(mockHttpHandler);
+        var transport = new SseClientTransport(_transportOptions, httpClient, LoggerFactory);
+        Assert.True(httpClient.DefaultRequestHeaders.Contains("test"));
+        Assert.Equal("header", httpClient.DefaultRequestHeaders.GetValues("test").First());
+    }
+
+    [Fact]
     public async Task ConnectAsync_Should_Connect_Successfully()
     {
         using var mockHttpHandler = new MockHttpHandler();

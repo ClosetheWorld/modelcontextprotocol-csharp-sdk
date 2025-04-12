@@ -47,6 +47,14 @@ internal sealed class SseClientSessionTransport : TransportBase
         _logger = (ILogger?)loggerFactory?.CreateLogger<SseClientTransport>() ?? NullLogger.Instance;
         _connectionEstablished = new TaskCompletionSource<bool>();
         _endpointName = endpointName;
+
+        if (_options.AdditionalHeaders != null)
+        {
+            foreach (var header in _options.AdditionalHeaders)
+            {
+                _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+            }
+        }
     }
 
     /// <inheritdoc/>

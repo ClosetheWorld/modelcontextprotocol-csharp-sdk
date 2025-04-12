@@ -49,6 +49,14 @@ public sealed class SseClientTransport : IClientTransport, IAsyncDisposable
         _loggerFactory = loggerFactory;
         _ownsHttpClient = ownsHttpClient;
         Name = transportOptions.Name ?? transportOptions.Endpoint.ToString();
+
+        if (_options.AdditionalHeaders != null)
+        {
+            foreach (var header in _options.AdditionalHeaders)
+            {
+                _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+            }
+        }
     }
 
     /// <inheritdoc />
